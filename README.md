@@ -52,6 +52,28 @@ flox services stop bazel-remote-cache
 >
 > A JSON response with `MaxSize`, `NumFiles`, etc. confirms the server is operational.
 
+## Inspecting and Clearing the Cache
+
+**Inspect** the cache size and file count:
+
+```bash
+# Server status (size, file count)
+curl http://localhost:9090/status
+
+# Disk usage
+du -sh $FLOX_ENV_CACHE/bazel-remote/data
+```
+
+**Clear** the cache by stopping the service, removing the data, and restarting:
+
+```bash
+flox services stop bazel-remote-cache
+rm -rf $FLOX_ENV_CACHE/bazel-remote/data
+flox services start
+```
+
+The data directory is recreated automatically on service start.
+
 ## Configuring Bazel Clients
 
 In any other environment running Bazel, add the following to the project's `.bazelrc` file (replace `CACHE_HOST` with the hostname or IP of the machine running this environment):
