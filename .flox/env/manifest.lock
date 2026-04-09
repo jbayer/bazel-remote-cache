@@ -1,0 +1,157 @@
+{
+  "lockfile-version": 1,
+  "manifest": {
+    "schema-version": "1.11.0",
+    "install": {
+      "bazel-remote": {
+        "pkg-path": "bazel-remote"
+      }
+    },
+    "vars": {
+      "BAZEL_REMOTE_GRPC_ADDRESS": "0.0.0.0:9092",
+      "BAZEL_REMOTE_HTTP_ADDRESS": "0.0.0.0:9090",
+      "BAZEL_REMOTE_MAX_SIZE": "10"
+    },
+    "hook": {
+      "on-activate": "  mkdir -p \"$FLOX_ENV_CACHE/bazel-remote/data\"\n"
+    },
+    "profile": {
+      "common": "echo \"\"\necho \"     ╔════════════════════════════════════════════════════════════╗\"\necho \"     ║              Bazel Remote Cache Server                     ║\"\necho \"     ╠════════════════════════════════════════════════════════════╣\"\necho \"     ║                                                            \"\necho \"     ║  Start the cache server:                                   \"\necho \"     ║  👉 flox services start                                    \"\necho \"     ║  👉 flox activate --start-services                         \"\necho \"     ║                                                            \"\necho \"     ║  Manage the service:                                       \"\necho \"     ║  👉 flox services status                                   \"\necho \"     ║  👉 flox services logs bazel-remote-cache                  \"\necho \"     ║  👉 flox services restart bazel-remote-cache               \"\necho \"     ║                                                            \"\necho \"     ║  Check cache status:                                       \"\necho \"     ║  👉 curl http://localhost:${BAZEL_REMOTE_HTTP_ADDRESS##*:}/status                      \"\necho \"     ║                                                            \"\necho \"     ║  Configure Bazel clients (.bazelrc):                       \"\necho \"     ║  build --remote_cache=grpc://CACHE_HOST:${BAZEL_REMOTE_GRPC_ADDRESS##*:}               \"\necho \"     ║                                                            \"\necho \"     ║  Or for localhost:                                         \"\necho \"     ║  build --remote_cache=grpc://localhost:${BAZEL_REMOTE_GRPC_ADDRESS##*:}                \"\necho \"     ║                                                            \"\necho \"     ║  Settings:                                                 \"\necho \"     ║    HTTP  = $BAZEL_REMOTE_HTTP_ADDRESS                                   \"\necho \"     ║    gRPC  = $BAZEL_REMOTE_GRPC_ADDRESS                                   \"\necho \"     ║    Cache = ${BAZEL_REMOTE_MAX_SIZE} GiB max                                      \"\necho \"     ╚════════════════════════════════════════════════════════════\"\necho \"\"\n"
+    },
+    "options": {
+      "systems": [
+        "aarch64-darwin",
+        "aarch64-linux",
+        "x86_64-darwin",
+        "x86_64-linux"
+      ]
+    },
+    "services": {
+      "bazel-remote-cache": {
+        "command": "  mkdir -p \"$FLOX_ENV_CACHE/bazel-remote/data\"\n  exec bazel-remote \\\n    --dir \"$FLOX_ENV_CACHE/bazel-remote/data\" \\\n    --http_address \"$BAZEL_REMOTE_HTTP_ADDRESS\" \\\n    --grpc_address \"$BAZEL_REMOTE_GRPC_ADDRESS\" \\\n    --max_size \"$BAZEL_REMOTE_MAX_SIZE\"\n",
+        "is-daemon": true,
+        "shutdown": {
+          "command": "kill $WATCHDOG_PID 2>/dev/null; kill $SERVICE_PID 2>/dev/null"
+        }
+      }
+    }
+  },
+  "packages": [
+    {
+      "attr_path": "bazel-remote",
+      "broken": false,
+      "derivation": "/nix/store/q4b3439vgv68dibm5kqb4kxxwacrq5h7-bazel-remote-2.6.1.drv",
+      "description": "Remote HTTP/1.1 cache for Bazel",
+      "install_id": "bazel-remote",
+      "license": "Apache-2.0",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=68d8aa3d661f0e6bd5862291b5bb263b2a6595c9",
+      "name": "bazel-remote-2.6.1",
+      "pname": "bazel-remote",
+      "rev": "68d8aa3d661f0e6bd5862291b5bb263b2a6595c9",
+      "rev_count": 975402,
+      "rev_date": "2026-04-05T21:03:29Z",
+      "scrape_date": "2026-04-07T06:03:31.723150Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "2.6.1",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/k6x81qmq0n6lp8skgkb2k1ay4j71ql2v-bazel-remote-2.6.1"
+      },
+      "system": "aarch64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "bazel-remote",
+      "broken": false,
+      "derivation": "/nix/store/sg9sn0lh3nqh6x5rpvbp7ilhmfwq1sw9-bazel-remote-2.6.1.drv",
+      "description": "Remote HTTP/1.1 cache for Bazel",
+      "install_id": "bazel-remote",
+      "license": "Apache-2.0",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=68d8aa3d661f0e6bd5862291b5bb263b2a6595c9",
+      "name": "bazel-remote-2.6.1",
+      "pname": "bazel-remote",
+      "rev": "68d8aa3d661f0e6bd5862291b5bb263b2a6595c9",
+      "rev_count": 975402,
+      "rev_date": "2026-04-05T21:03:29Z",
+      "scrape_date": "2026-04-07T06:34:56.155655Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "2.6.1",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/pcshqh8ynj06xdm7w50999qhdbl9ds02-bazel-remote-2.6.1"
+      },
+      "system": "aarch64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "bazel-remote",
+      "broken": false,
+      "derivation": "/nix/store/l7qpi53l9p9z915kv0shrkwgh3pz293l-bazel-remote-2.6.1.drv",
+      "description": "Remote HTTP/1.1 cache for Bazel",
+      "install_id": "bazel-remote",
+      "license": "Apache-2.0",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=68d8aa3d661f0e6bd5862291b5bb263b2a6595c9",
+      "name": "bazel-remote-2.6.1",
+      "pname": "bazel-remote",
+      "rev": "68d8aa3d661f0e6bd5862291b5bb263b2a6595c9",
+      "rev_count": 975402,
+      "rev_date": "2026-04-05T21:03:29Z",
+      "scrape_date": "2026-04-07T07:04:59.543238Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "2.6.1",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/15s4zfn5hy29q2vbmq5i0qwq6h1b66q1-bazel-remote-2.6.1"
+      },
+      "system": "x86_64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "bazel-remote",
+      "broken": false,
+      "derivation": "/nix/store/8kc8gr5k6zipf8xc2dhqjxdjwl0d2x7w-bazel-remote-2.6.1.drv",
+      "description": "Remote HTTP/1.1 cache for Bazel",
+      "install_id": "bazel-remote",
+      "license": "Apache-2.0",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=68d8aa3d661f0e6bd5862291b5bb263b2a6595c9",
+      "name": "bazel-remote-2.6.1",
+      "pname": "bazel-remote",
+      "rev": "68d8aa3d661f0e6bd5862291b5bb263b2a6595c9",
+      "rev_count": 975402,
+      "rev_date": "2026-04-05T21:03:29Z",
+      "scrape_date": "2026-04-07T07:39:05.910331Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "2.6.1",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/0vczddcsjncwp5ppwjj5c6rbb7g12i6l-bazel-remote-2.6.1"
+      },
+      "system": "x86_64-linux",
+      "group": "toplevel",
+      "priority": 5
+    }
+  ]
+}

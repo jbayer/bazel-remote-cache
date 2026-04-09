@@ -1,0 +1,70 @@
+schema-version = "1.11.0"
+
+[install]
+bazel-remote.pkg-path = "bazel-remote"
+
+[vars]
+BAZEL_REMOTE_HTTP_ADDRESS = "0.0.0.0:9090"
+BAZEL_REMOTE_GRPC_ADDRESS = "0.0.0.0:9092"
+BAZEL_REMOTE_MAX_SIZE = "10"
+
+[hook]
+on-activate = '''
+  mkdir -p "$FLOX_ENV_CACHE/bazel-remote/data"
+'''
+
+[profile]
+common = '''
+echo ""
+echo "     ╔════════════════════════════════════════════════════════════╗"
+echo "     ║              Bazel Remote Cache Server                     ║"
+echo "     ╠════════════════════════════════════════════════════════════╣"
+echo "     ║                                                            "
+echo "     ║  Start the cache server:                                   "
+echo "     ║  👉 flox services start                                    "
+echo "     ║  👉 flox activate --start-services                         "
+echo "     ║                                                            "
+echo "     ║  Manage the service:                                       "
+echo "     ║  👉 flox services status                                   "
+echo "     ║  👉 flox services logs bazel-remote-cache                  "
+echo "     ║  👉 flox services restart bazel-remote-cache               "
+echo "     ║                                                            "
+echo "     ║  Check cache status:                                       "
+echo "     ║  👉 curl http://localhost:${BAZEL_REMOTE_HTTP_ADDRESS##*:}/status                      "
+echo "     ║                                                            "
+echo "     ║  Configure Bazel clients (.bazelrc):                       "
+echo "     ║  build --remote_cache=grpc://CACHE_HOST:${BAZEL_REMOTE_GRPC_ADDRESS##*:}               "
+echo "     ║                                                            "
+echo "     ║  Or for localhost:                                         "
+echo "     ║  build --remote_cache=grpc://localhost:${BAZEL_REMOTE_GRPC_ADDRESS##*:}                "
+echo "     ║                                                            "
+echo "     ║  Settings:                                                 "
+echo "     ║    HTTP  = $BAZEL_REMOTE_HTTP_ADDRESS                                   "
+echo "     ║    gRPC  = $BAZEL_REMOTE_GRPC_ADDRESS                                   "
+echo "     ║    Cache = ${BAZEL_REMOTE_MAX_SIZE} GiB max                                      "
+echo "     ╚════════════════════════════════════════════════════════════"
+echo ""
+'''
+
+[services]
+[services.bazel-remote-cache]
+command = '''
+  mkdir -p "$FLOX_ENV_CACHE/bazel-remote/data"
+  exec bazel-remote \
+    --dir "$FLOX_ENV_CACHE/bazel-remote/data" \
+    --http_address "$BAZEL_REMOTE_HTTP_ADDRESS" \
+    --grpc_address "$BAZEL_REMOTE_GRPC_ADDRESS" \
+    --max_size "$BAZEL_REMOTE_MAX_SIZE"
+'''
+is-daemon = true
+
+[services.bazel-remote-cache.shutdown]
+command = "kill $WATCHDOG_PID 2>/dev/null; kill $SERVICE_PID 2>/dev/null"
+
+[options]
+systems = [
+  "aarch64-darwin",
+  "aarch64-linux",
+  "x86_64-darwin",
+  "x86_64-linux",
+]
