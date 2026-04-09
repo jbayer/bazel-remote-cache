@@ -43,6 +43,15 @@ flox services restart bazel-remote-cache
 flox services stop bazel-remote-cache
 ```
 
+> **Note:** `flox services status` may show "Launching" even after the service is fully ready.
+> To verify the cache server is running and accepting requests:
+>
+> ```bash
+> curl http://localhost:9090/status
+> ```
+>
+> A JSON response with `MaxSize`, `NumFiles`, etc. confirms the server is operational.
+
 ## Configuring Bazel Clients
 
 In any other environment running Bazel, add the following to the project's `.bazelrc` file (replace `CACHE_HOST` with the hostname or IP of the machine running this environment):
